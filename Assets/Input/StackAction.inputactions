@@ -1,0 +1,46 @@
+{
+    "name": "StackAction",
+    "maps": [
+        {
+            "name": "Stack",
+            "id": "813eb8c8-f61f-498a-b362-a6c0561a5d76",
+            "actions": [
+                {
+                    "name": "Stop",
+                    "type": "Button",
+                    "id": "a226b12a-cecb-403d-9f66-68fe6dc82801",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7a1c5a58-5cf4-4822-817a-2260c7e13ec9",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Stop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
