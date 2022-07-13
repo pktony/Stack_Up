@@ -7,8 +7,7 @@ public class StackSpawner : MonoBehaviour
     public GameObject stack = null;
     private GameObject bottomStack = null;
     private GameObject currentStack = null;
-
-    public GameObject test = null;
+    public Transform stackParent = null;
 
     float sizeDiff = 0.0f;
     Vector3 scaleChange = Vector3.zero;
@@ -19,12 +18,11 @@ public class StackSpawner : MonoBehaviour
     private void Awake()
     {
         bottomStack = FindObjectOfType<Ground>().gameObject;
-        currentStack = FindObjectOfType<Stack>().gameObject;
+        currentStack = Instantiate(stack, stackParent);
         currentStack.transform.position = this.transform.position;
 
         spawnPosition_Forward = true;
     }
-
     /// <summary>
     /// Stack 위치에 따른 크기 변경
     /// </summary>
@@ -34,21 +32,25 @@ public class StackSpawner : MonoBehaviour
         {
             sizeDiff = bottomStack.transform.position.z - currentStack.transform.position.z;
             scaleChange = new Vector3(0, 0, sizeDiff);
+            HowExact(bottomStack.transform.localScale.z);
         }
         else
         { 
             sizeDiff =  bottomStack.transform.position.x - currentStack.transform.position.x;
             scaleChange = new Vector3(sizeDiff, 0, 0);
+            HowExact(bottomStack.transform.localScale.x);
         }
-        Debug.Log(sizeDiff);
+    }
 
-        if (sizeDiff < -0.1 && sizeDiff > -5.0f)
+    void HowExact(float bottomLocalScale)
+    {
+        if (sizeDiff < -0.1 && sizeDiff > -bottomLocalScale)
         {
             currentStack.transform.localScale += scaleChange;
             currentStack.transform.position += scaleChange * 0.5f;
             GameManager.Inst.Score++;
         }
-        else if(sizeDiff > 0.1 && sizeDiff < 5.0f) //지나쳤다.
+        else if (sizeDiff > 0.1 && sizeDiff < bottomLocalScale) //지나쳤다.
         {
             currentStack.transform.localScale -= scaleChange;
             currentStack.transform.position += scaleChange * 0.5f;
@@ -59,11 +61,11 @@ public class StackSpawner : MonoBehaviour
             Debug.Log("정확했다.");
             GameManager.Inst.Score++;
         }
-        else if ( Mathf.Abs(sizeDiff) >= 5.0f) // 완전 벗어낫다
+        else if (Mathf.Abs(sizeDiff) >= bottomLocalScale) // 완전 벗어낫다
         {
             Debug.Log("GameOver");
             GameManager.Inst.IsGameover = true;
-            GameManager.Inst.Score++;
+            GameManager.Inst.onGameover?.Invoke();
         }
     }
 
@@ -85,10 +87,9 @@ public class StackSpawner : MonoBehaviour
                 //transform.position += new Vector3(8.0f - bottomStack.transform.position.x, stackHeight, -8.0f);
                 transform.position = new Vector3(bottomStack.transform.position.x, stackHeight * GameManager.Inst.Score, 8.0f);
             }
-
             spawnPosition_Forward = !spawnPosition_Forward;
 
-            currentStack = Instantiate(stack);
+            currentStack = Instantiate(stack, stackParent);
             currentStack.transform.localScale = bottomStack.transform.localScale;
             currentStack.transform.position = this.transform.position;
         }

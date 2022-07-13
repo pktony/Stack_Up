@@ -52,10 +52,13 @@ public class Stack : MonoBehaviour
 
     void OnStopInput(InputAction.CallbackContext _)
     {
-        moveSpeed = 0f;
-        spawner.OnNextFloor();
-        Debug.Log(GameManager.Inst.Score);
+        if (!GameManager.Inst.IsGameover)
+        {
+            moveSpeed = 0f;
+            spawner.OnNextFloor();
+            Debug.Log(GameManager.Inst.Score);
 
-        Destroy(this);
+            Destroy(this);
+        }
     }
 }

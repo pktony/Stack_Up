@@ -35,6 +35,15 @@ public partial class @StackAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Start"",
+                    ""type"": ""Button"",
+                    ""id"": ""11566d36-ebb2-41f6-8bbf-b776b465172e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -46,6 +55,17 @@ public partial class @StackAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""Stop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e21238c-cd91-449f-8377-a9d0a38e1b87"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Start"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -69,6 +89,7 @@ public partial class @StackAction : IInputActionCollection2, IDisposable
         // Stack
         m_Stack = asset.FindActionMap("Stack", throwIfNotFound: true);
         m_Stack_Stop = m_Stack.FindAction("Stop", throwIfNotFound: true);
+        m_Stack_Start = m_Stack.FindAction("Start", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -129,11 +150,13 @@ public partial class @StackAction : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Stack;
     private IStackActions m_StackActionsCallbackInterface;
     private readonly InputAction m_Stack_Stop;
+    private readonly InputAction m_Stack_Start;
     public struct StackActions
     {
         private @StackAction m_Wrapper;
         public StackActions(@StackAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Stop => m_Wrapper.m_Stack_Stop;
+        public InputAction @Start => m_Wrapper.m_Stack_Start;
         public InputActionMap Get() { return m_Wrapper.m_Stack; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -146,6 +169,9 @@ public partial class @StackAction : IInputActionCollection2, IDisposable
                 @Stop.started -= m_Wrapper.m_StackActionsCallbackInterface.OnStop;
                 @Stop.performed -= m_Wrapper.m_StackActionsCallbackInterface.OnStop;
                 @Stop.canceled -= m_Wrapper.m_StackActionsCallbackInterface.OnStop;
+                @Start.started -= m_Wrapper.m_StackActionsCallbackInterface.OnStart;
+                @Start.performed -= m_Wrapper.m_StackActionsCallbackInterface.OnStart;
+                @Start.canceled -= m_Wrapper.m_StackActionsCallbackInterface.OnStart;
             }
             m_Wrapper.m_StackActionsCallbackInterface = instance;
             if (instance != null)
@@ -153,6 +179,9 @@ public partial class @StackAction : IInputActionCollection2, IDisposable
                 @Stop.started += instance.OnStop;
                 @Stop.performed += instance.OnStop;
                 @Stop.canceled += instance.OnStop;
+                @Start.started += instance.OnStart;
+                @Start.performed += instance.OnStart;
+                @Start.canceled += instance.OnStart;
             }
         }
     }
@@ -169,5 +198,6 @@ public partial class @StackAction : IInputActionCollection2, IDisposable
     public interface IStackActions
     {
         void OnStop(InputAction.CallbackContext context);
+        void OnStart(InputAction.CallbackContext context);
     }
 }

@@ -10,13 +10,16 @@ public class GameManager : MonoBehaviour
 
     private float followHeight = 0.5f;
     private int score = 0;
+
+    public Action onScoreUp;
+    public Action onGameover;
     public int Score 
     { 
         get => score;
         set 
         { 
-            score = value; 
-
+            score = value;
+            onScoreUp?.Invoke();
             if (score > 2)
             {
                 Camera.main.transform.position += transform.up * followHeight;
@@ -25,7 +28,16 @@ public class GameManager : MonoBehaviour
     }
 
     private bool isGameover = false;
-    public bool IsGameover { get => isGameover; set { isGameover = value; } }
+    public bool IsGameover { get => isGameover; 
+        set
+        { 
+            isGameover = value;
+            if (IsGameover)
+            {
+                onGameover?.Invoke();
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -43,7 +55,7 @@ public class GameManager : MonoBehaviour
 
     private void Initialize()
     {
-        isGameover = false;
+        isGameover = true;
         score = 0;
     }
 }
