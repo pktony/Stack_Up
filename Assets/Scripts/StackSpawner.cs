@@ -9,10 +9,12 @@ public class StackSpawner : MonoBehaviour
     private GameObject currentStack = null;
     public Transform stackParent = null;
 
-    float sizeDiff = 0.0f;
-    Vector3 scaleChange = Vector3.zero;
+    private float sizeDiff = 0.0f;
+    private Vector3 scaleChange = Vector3.zero;
+    private int colorChangeIndex = 3;
+    private Vector3 randomColor = Vector3.zero;
 
-    private float stackHeight = 0.5f;
+    private readonly float stackHeight = 0.5f;
     public bool spawnPosition_Forward = true;
 
     private void Awake()
@@ -58,12 +60,10 @@ public class StackSpawner : MonoBehaviour
         }
         else if (Mathf.Abs(sizeDiff) <= 0.1) //정확했다.
         {
-            Debug.Log("정확했다.");
             GameManager.Inst.Score++;
         }
         else if (Mathf.Abs(sizeDiff) >= bottomLocalScale) // 완전 벗어낫다
         {
-            Debug.Log("GameOver");
             GameManager.Inst.IsGameover = true;
             GameManager.Inst.onGameover?.Invoke();
         }
@@ -90,8 +90,24 @@ public class StackSpawner : MonoBehaviour
             spawnPosition_Forward = !spawnPosition_Forward;
 
             currentStack = Instantiate(stack, stackParent);
+            currentStack.GetComponent<MeshRenderer>().material.color =
+                    new Color(randomColor.x, randomColor.y, randomColor.z);
             currentStack.transform.localScale = bottomStack.transform.localScale;
             currentStack.transform.position = this.transform.position;
+
+            colorChangeIndex--;
+            ChangeColor();
+        }
+    }
+
+    private void ChangeColor()
+    {
+        if (colorChangeIndex < 0)
+        {
+            randomColor = Random.insideUnitSphere;
+            currentStack.GetComponent<MeshRenderer>().material.color =
+                new Color(randomColor.x, randomColor.y, randomColor.z);
+            colorChangeIndex = 3;
         }
     }
 }

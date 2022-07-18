@@ -7,14 +7,16 @@ public class Stack : MonoBehaviour
 {
     StackAction input = null;
     StackSpawner spawner = null;
+    MeshRenderer meshRender = null;
 
     [SerializeField] private float moveSpeed = 3.0f;
-    private float stackSize = 5.0f;
+    private readonly float stackSize = 5.0f;
 
     private void Awake()
     {
         input = new();
         spawner = FindObjectOfType<StackSpawner>();
+        meshRender = GetComponent<MeshRenderer>();
 
         this.transform.localScale = new Vector3(stackSize, 0.5f, stackSize);
     }
@@ -42,7 +44,7 @@ public class Stack : MonoBehaviour
     {
         if (spawner.spawnPosition_Forward)
         {
-            transform.position += Time.deltaTime * moveSpeed * -transform.forward; //Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * stackSpeed);
+            transform.position += Time.deltaTime * moveSpeed * -transform.forward;
         }
         else
         {
@@ -56,7 +58,7 @@ public class Stack : MonoBehaviour
         {
             moveSpeed = 0f;
             spawner.OnNextFloor();
-            Debug.Log(GameManager.Inst.Score);
+            //Debug.Log(GameManager.Inst.Score);
 
             Destroy(this);
         }

@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     private static GameManager instance = null;
     public static GameManager Inst { get => instance; }
 
-    private float followHeight = 0.5f;
+    private readonly float followHeight = 0.5f;
     private int score = 0;
 
     public Action onScoreUp;
