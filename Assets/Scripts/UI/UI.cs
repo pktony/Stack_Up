@@ -8,9 +8,9 @@ public class UI : MonoBehaviour
 {
     StackAction input = null;
 
-    GameObject startButton = null;
-    GameObject gameover_Text = null;
-    GameObject restartButton = null;
+    public GameObject startButton = null;
+    public GameObject gameover_Text = null;
+    public GameObject restartButton = null;
 
     Scene playScene;
 
@@ -18,9 +18,9 @@ public class UI : MonoBehaviour
     {
         input = new();
 
-        startButton = transform.Find("Start").gameObject;
-        gameover_Text = transform.Find("Gameover").gameObject;
-        restartButton = transform.Find("Restart").gameObject;
+        //startButton = transform.Find("Start").gameObject;
+        //gameover_Text = transform.Find("Gameover").gameObject;
+        //restartButton = transform.Find("Restart").gameObject;
 
         playScene = SceneManager.GetSceneByBuildIndex(0);
     }
